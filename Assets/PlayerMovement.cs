@@ -11,6 +11,10 @@ public class PlayerMovement : MonoBehaviour
     public bool grounded;
 
     public float groundDrag;
+    public float jumpForce;
+    public float jumpCD;
+    public float airMultiplier;
+    bool readyToJump;
 
     public Transform orientation;
 
@@ -54,6 +58,15 @@ public class PlayerMovement : MonoBehaviour
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
+
+        if (Input.GetKeyDown(KeyCode.Space) && grounded == true)
+        {
+            readyToJump = false;
+
+            Jump();
+
+            Invoke(nameof(ResetJump), jumpCD);
+        }
     }
 
     private void MovePlayer()
@@ -72,5 +85,16 @@ public class PlayerMovement : MonoBehaviour
             Vector3 limitedVel = flatVel.normalized * moveSpeed;
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
+    }
+
+    private void Jump()
+    {
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+    }
+
+    private void ResetJump()
+    {
+        readyToJump = true;
     }
 }
