@@ -1,18 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ExpandRing : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public float expansionSpeed = 1.0f;
+
+    private ParticleSystem particleSystem;
+    private ParticleSystem.ShapeModule shapeModule;
+
+    private void Start()
     {
-        
+        particleSystem = GetComponent<ParticleSystem>();
+        shapeModule = particleSystem.shape;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        // Increase the ring radius over time
+        shapeModule.radius += expansionSpeed * Time.deltaTime;
     }
 }
